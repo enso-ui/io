@@ -22,10 +22,12 @@ export default {
     },
 
     created() {
-        this.listen();
+        this.connect()
+            .then(() => this.listen());
     },
 
     methods: {
+        ...mapActions('websockets', ['connect']),
         cancel(operation) {
             const type = this.enums.ioTypes._get(operation.type);
 
