@@ -22,13 +22,13 @@
         <template #info="{ operation }">
             <p class="is-flex is-align-items-center">
                 <span class="icon has-text-success">
-                    <fa icon="check"/>
+                    <fa :icon="faCheck"/>
                 </span>
                 <span class="has-text-weight-bold has-text-success">
                     {{ shortNumber(operation.payload.successful) }}
                 </span>
                 <span class="icon has-text-danger">
-                    <fa icon="times"/>
+                    <fa :icon="faXmark"/>
                 </span>
                 <span class="has-text-weight-bold has-text-danger">
                     {{ shortNumber(operation.payload.failed) }}
@@ -39,14 +39,11 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
 import { FontAwesomeIcon as Fa } from '@fortawesome/vue-fontawesome';
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { faCheck, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faCheck, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { shortNumber } from '@enso-ui/mixins';
 import Operation from './Operation.vue';
-
-library.add(faCheck, faTimes);
+import { useStore } from '../../../../utils/pinia';
 
 export default {
     name: 'Import',
@@ -55,7 +52,16 @@ export default {
 
     inject: ['i18n'],
 
-    computed: mapState(['enums']),
+    data: () => ({
+        faCheck,
+        faXmark,
+    }),
+
+    computed: {
+        enums() {
+            return useStore('enums').enums;
+        },
+    },
 
     methods: {
         shortNumber(value) {

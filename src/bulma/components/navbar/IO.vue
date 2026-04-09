@@ -1,7 +1,7 @@
 <template>
     <core-i-o>
         <template #default="{ events, count, imports, exports, tasks }">
-            <navbar-item icon="sync-alt"
+            <navbar-item :icon="faArrowsRotate"
                 v-if="count > 0">
                 <template #desktop-icon="{ icon }">
                     <span class="icon">
@@ -42,15 +42,12 @@
 <script>
 import { clickOutside } from '@enso-ui/directives';
 import { FontAwesomeIcon as Fa } from '@fortawesome/vue-fontawesome';
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { faSyncAlt, faDatabase } from '@fortawesome/free-solid-svg-icons';
+import { faArrowsRotate } from '@fortawesome/free-solid-svg-icons';
 import NavbarItem from '@enso-ui/ui/src/bulma/components/navbar/NavbarItem.vue';
 import CoreIO from '../../../core/components/navbar/IO.vue';
 import Import from './io/Import.vue';
 import Export from './io/Export.vue';
 import Task from './io/Task.vue';
-
-library.add(faSyncAlt, faDatabase);
 
 export default {
     name: 'IO',
@@ -60,6 +57,10 @@ export default {
     components: {
         CoreIO, Export, Fa, Import, NavbarItem, Task,
     },
+
+    data: () => ({
+        faArrowsRotate,
+    }),
 };
 </script>
 

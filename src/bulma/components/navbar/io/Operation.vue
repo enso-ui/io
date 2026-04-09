@@ -6,7 +6,7 @@
                     elapsed, end, events, ioTypes, operation,
                     remaining, toggle, cancellable,
                 }">
-                <div class="level is-mobile is-marginless">
+                <div class="level is-mobile m-0">
                     <div class="level-left">
                         <div class="level-item">
                             <p class="one-line">
@@ -28,7 +28,7 @@
                 </div>
                 <slot name="body" :operation="operation"/>
                 <div class="level is-mobile pt-1
-                    pb-1 is-marginless">
+                    pb-1 m-0">
                     <div class="level-item">
                         <progress class="progress is-xsmall is-dark"
                             :value="operation.progress"
@@ -46,7 +46,7 @@
                         v-if="cancellable">
                         <a class="button is-small is-naked"
                             v-on="events">
-                            <fa icon="times-circle"/>
+                            <fa :icon="faCircleXmark"/>
                         </a>
                     </div>
                 </div>
@@ -65,6 +65,7 @@
                                 <span class="icon is-small"
                                     v-else>
                                     <fa icon="spinner"
+                                        :icon="faSpinner"
                                         pulse/>
                                 </span>
                             </template>
@@ -76,8 +77,9 @@
                                 @click.stop="toggle">
                                 <span class="icon is-small">
                                     <fa icon="hourglass-end"
+                                        :icon="faHourglassEnd"
                                         v-if="end"/>
-                                    <fa icon="hourglass-start"
+                                    <fa :icon="faHourglassStart"
                                         v-else/>
                                 </span>
                             </a>
@@ -91,14 +93,11 @@
 
 <script>
 import { FontAwesomeIcon as Fa } from '@fortawesome/vue-fontawesome';
-import { library } from '@fortawesome/fontawesome-svg-core';
 import {
-    faHourglassStart, faHourglassEnd, faSpinner, faTimesCircle,
+    faHourglassStart, faHourglassEnd, faSpinner, faCircleXmark,
 } from '@fortawesome/free-solid-svg-icons';
 import Avatar from '@enso-ui/users/src/bulma/pages/users/components/Avatar.vue';
 import CoreOperation from '../../../../core/components/navbar/io/Operation.vue';
-
-library.add(faHourglassStart, faHourglassEnd, faSpinner, faTimesCircle);
 
 export default {
     name: 'Operation',
@@ -106,5 +105,12 @@ export default {
     components: { Avatar, CoreOperation, Fa },
 
     inheritAttrs: false,
+
+    data: () => ({
+        faCircleXmark,
+        faHourglassEnd,
+        faHourglassStart,
+        faSpinner,
+    }),
 };
 </script>

@@ -1,5 +1,7 @@
 <script>
-import { mapState, mapGetters, mapActions } from 'vuex';
+import { app } from '@enso-ui/ui/src/pinia/app';
+import { websockets } from '@enso-ui/ui/src/pinia/websockets';
+import { useStore } from '../../../utils/pinia';
 
 export default {
     name: 'IO',
@@ -9,12 +11,24 @@ export default {
     data: () => ({
         imports: [],
         exports: [],
+        listenTimer: null,
+        listening: false,
         tasks: [],
     }),
 
     computed: {
-        ...mapGetters('websockets', ['channels']),
-        ...mapState(['user', 'meta', 'enums']),
+        channels() {
+            return websockets().channels ?? {};
+        },
+        user() {
+            return app().user;
+        },
+        meta() {
+            return app().meta;
+        },
+        enums() {
+            return useStore('enums').enums;
+        },
         count() {
             return ['imports', 'exports', 'tasks']
                 .reduce((count, type) => (count + this[type].length), 0);
@@ -22,18 +36,37 @@ export default {
     },
 
     created() {
-        this.connect()
-            .then(() => this.listen());
+        this.ensureListener();
+    },
+
+    beforeUnmount() {
+        clearTimeout(this.listenTimer);
     },
 
     methods: {
-        ...mapActions('websockets', ['connect']),
+        connect() {
+            return websockets().connect(app().meta.csrfToken);
+        },
         cancel(operation) {
             const type = this.enums.ioTypes._get(operation.type);
 
             this.http.patch(this.route(`${type}.cancel`, { [type]: operation.id }))
                 .then(({ data: { message } }) => this.toastr.warning(message))
                 .catch(this.errorHandler);
+        },
+        ensureListener() {
+            if (this.listening) {
+                return;
+            }
+
+            if (!window.Echo || !this.channels.io) {
+                this.listenTimer = setTimeout(() => this.ensureListener(), 250);
+                return;
+            }
+
+            this.listening = true;
+            this.connect()
+                .then(() => this.listen());
         },
         listen() {
             window.Echo.private(this.channels.io)

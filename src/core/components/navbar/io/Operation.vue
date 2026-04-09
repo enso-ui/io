@@ -1,7 +1,7 @@
 <script>
-import { mapState } from 'vuex';
 import formatDistance from '@enso-ui/ui/src/modules/plugins/date-fns/formatDistance';
 import { isAfter } from 'date-fns';
+import { useStore } from '../../../../utils/pinia';
 
 export default {
     name: 'Operation',
@@ -27,7 +27,9 @@ export default {
     }),
 
     computed: {
-        ...mapState(['enums']),
+        enums() {
+            return useStore('enums').enums;
+        },
     },
 
     beforeMount() {
