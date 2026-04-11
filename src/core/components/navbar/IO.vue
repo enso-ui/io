@@ -1,6 +1,4 @@
 <script>
-import { app } from '@enso-ui/ui/src/pinia/app';
-import { websockets } from '@enso-ui/ui/src/pinia/websockets';
 import { useStore } from '../../../utils/pinia';
 
 export default {
@@ -18,13 +16,13 @@ export default {
 
     computed: {
         channels() {
-            return websockets().channels ?? {};
+            return useStore('websockets').channels ?? {};
         },
         user() {
-            return app().user;
+            return useStore('app').user;
         },
         meta() {
-            return app().meta;
+            return useStore('app').meta;
         },
         enums() {
             return useStore('enums').enums;
@@ -45,7 +43,7 @@ export default {
 
     methods: {
         connect() {
-            return websockets().connect(app().meta.csrfToken);
+            return useStore('websockets').connect(useStore('app').meta.csrfToken);
         },
         cancel(operation) {
             const type = this.enums.ioTypes._get(operation.type);
