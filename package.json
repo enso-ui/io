@@ -1,6 +1,6 @@
 {
   "name": "@enso-ui/io",
-  "version": "3.3.5",
+  "version": "3.3.6",
   "description": "Basic io package",
   "main": "src/bulma/components/navbar/IO.vue",
   "repository": {
