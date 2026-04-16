@@ -1,7 +1,7 @@
 <script>
+import { enums as useEnums } from '@enso-ui/enums/src/pinia/enums';
 import { app } from '@enso-ui/ui/src/pinia/app';
 import { websockets } from '@enso-ui/ui/src/pinia/websockets';
-import { useStore } from '../../../utils/pinia';
 
 export default {
     name: 'IO',
@@ -27,7 +27,7 @@ export default {
             return app().meta;
         },
         enums() {
-            return useStore('enums').enums;
+            return useEnums().enums;
         },
         count() {
             return ['imports', 'exports', 'tasks']

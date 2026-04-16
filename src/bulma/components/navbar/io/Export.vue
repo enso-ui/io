@@ -32,9 +32,9 @@
 <script>
 import { FontAwesomeIcon as Fa } from '@fortawesome/vue-fontawesome';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
+import { enums as useEnums } from '@enso-ui/enums/src/pinia/enums';
 import { shortNumber } from '@enso-ui/mixins';
 import Operation from './Operation.vue';
-import { useStore } from '../../../../utils/pinia';
 
 export default {
     name: 'Export',
@@ -49,7 +49,7 @@ export default {
 
     computed: {
         enums() {
-            return useStore('enums').enums;
+            return useEnums().enums;
         },
     },
 

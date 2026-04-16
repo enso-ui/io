@@ -1,7 +1,7 @@
 <script>
+import { enums as useEnums } from '@enso-ui/enums/src/pinia/enums';
 import formatDistance from '@enso-ui/ui/src/modules/plugins/date-fns/formatDistance';
 import { isAfter } from 'date-fns';
-import { useStore } from '../../../../utils/pinia';
 
 export default {
     name: 'Operation',
@@ -28,7 +28,7 @@ export default {
 
     computed: {
         enums() {
-            return useStore('enums').enums;
+            return useEnums().enums;
         },
     },
 
