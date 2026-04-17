@@ -1,5 +1,5 @@
 <script>
-import { enums as useEnums } from '@enso-ui/enums/src/pinia/enums';
+import { enums } from '@enso-ui/enums/src/pinia/enums';
 import { app } from '@enso-ui/ui/src/pinia/app';
 import { websockets } from '@enso-ui/ui/src/pinia/websockets';
 
@@ -27,7 +27,7 @@ export default {
             return app().meta;
         },
         enums() {
-            return useEnums().enums;
+            return enums().enums;
         },
         count() {
             return ['imports', 'exports', 'tasks']
