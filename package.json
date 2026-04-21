@@ -1,7 +1,7 @@
 {
   "name": "@enso-ui/io",
   "version": "3.3.8",
-  "description": "Basic io package",
+  "description": "IO operation widgets for Enso UI navbars",
   "main": "src/bulma/components/navbar/IO.vue",
   "repository": {
     "type": "git",
