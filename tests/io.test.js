@@ -1,46 +1,22 @@
-import { describe, expect, it, vi } from 'vitest';
+import { readFileSync } from 'node:fs';
+import { describe, expect, it } from 'vitest';
 
-vi.mock('@enso-ui/enums/src/pinia/enums', () => ({
-    enums: () => ({
-        enums: {
-            ioTypes: {
-                _get: value => value,
-            },
-            ioStatuses: {
-                Started: 'started',
-                Finalized: 'finalized',
-            },
-        },
-    }),
-}));
+const source = path => readFileSync(new URL(path, import.meta.url), 'utf8');
 
-vi.mock('@enso-ui/ui/src/pinia/app', () => ({
-    app: () => ({
-        user: { id: 1 },
-        meta: { csrfToken: 'csrf' },
-    }),
-}));
-
-vi.mock('@enso-ui/ui/src/pinia/websockets', () => ({
-    websockets: () => ({
-        channels: { io: 'io-channel' },
-        connect: vi.fn().mockResolvedValue(),
-    }),
-}));
-
-vi.mock('@enso-ui/ui/src/modules/plugins/date-fns/formatDistance', () => ({
-    default: value => value,
-}));
-
-import IO from '../src/core/components/navbar/IO.vue';
-import Operation from '../src/core/components/navbar/io/Operation.vue';
-
-describe('io state access', () => {
-    it('uses enum store directly in IO component', () => {
-        expect(IO.computed.enums.call({}).ioStatuses.Started).toBe('started');
+describe('composition api', () => {
+    it('uses setup in headless components', () => {
+        expect(source('../src/core/components/navbar/IO.vue')).toContain('setup(_, { slots })');
+        expect(source('../src/core/components/navbar/io/Operation.vue'))
+            .toContain('setup(props, { emit, slots })');
     });
 
-    it('uses enum store directly in operation component', () => {
-        expect(Operation.computed.enums.call({}).ioTypes._get('import')).toBe('import');
+    it('uses the enum store directly', () => {
+        const io = source('../src/core/components/navbar/IO.vue');
+        const operation = source('../src/core/components/navbar/io/Operation.vue');
+
+        expect(io).toContain('enums().enums.ioStatuses.Started');
+        expect(io).toContain('enums().enums.ioTypes._get');
+        expect(operation).toContain('enums().enums.ioTypes');
+        expect(`${io}\n${operation}`).not.toContain('computed:');
     });
 });

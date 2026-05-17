@@ -39,8 +39,7 @@
     </core-i-o>
 </template>
 
-<script>
-import { clickOutside } from '@enso-ui/directives';
+<script setup>
 import { FontAwesomeIcon as Fa } from '@fortawesome/vue-fontawesome';
 import { faArrowsRotate } from '@fortawesome/free-solid-svg-icons';
 import NavbarItem from '@enso-ui/ui/src/bulma/components/navbar/NavbarItem.vue';
@@ -49,19 +48,9 @@ import Import from './io/Import.vue';
 import Export from './io/Export.vue';
 import Task from './io/Task.vue';
 
-export default {
+defineOptions({
     name: 'IO',
-
-    directives: { clickOutside },
-
-    components: {
-        CoreIO, Export, Fa, Import, NavbarItem, Task,
-    },
-
-    data: () => ({
-        faArrowsRotate,
-    }),
-};
+});
 </script>
 
 <style lang="scss">
@@ -70,6 +59,10 @@ export default {
 
     li {
         padding: 0.375rem 0 !important;
+    }
+
+    li.navbar-item:hover {
+        background-color: transparent !important;
     }
 
     li:not(:last-child) {

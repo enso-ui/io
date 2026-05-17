@@ -64,8 +64,7 @@
                                 </span>
                                 <span class="icon is-small"
                                     v-else>
-                                    <fa icon="spinner"
-                                        :icon="faSpinner"
+                                    <fa :icon="faSpinner"
                                         pulse/>
                                 </span>
                             </template>
@@ -76,8 +75,7 @@
                             <a class="button is-small is-naked"
                                 @click.stop="toggle">
                                 <span class="icon is-small">
-                                    <fa icon="hourglass-end"
-                                        :icon="faHourglassEnd"
+                                    <fa :icon="faHourglassEnd"
                                         v-if="end"/>
                                     <fa :icon="faHourglassStart"
                                         v-else/>
@@ -91,7 +89,7 @@
     </div>
 </template>
 
-<script>
+<script setup>
 import { FontAwesomeIcon as Fa } from '@fortawesome/vue-fontawesome';
 import {
     faHourglassStart, faHourglassEnd, faSpinner, faCircleXmark,
@@ -99,18 +97,8 @@ import {
 import Avatar from '@enso-ui/users/src/bulma/pages/users/components/Avatar.vue';
 import CoreOperation from '../../../../core/components/navbar/io/Operation.vue';
 
-export default {
+defineOptions({
     name: 'Operation',
-
-    components: { Avatar, CoreOperation, Fa },
-
     inheritAttrs: false,
-
-    data: () => ({
-        faCircleXmark,
-        faHourglassEnd,
-        faHourglassStart,
-        faSpinner,
-    }),
-};
+});
 </script>

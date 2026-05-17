@@ -2,7 +2,7 @@
     <operation cancellable>
         <template #status="{ operation }">
             <span class="has-text-weight-bold">
-                {{ enums.importStatuses._get(operation.status) }}
+                {{ enums().enums.importStatuses._get(operation.status) }}
             </span>
         </template>
         <template #body="{ operation }">
@@ -38,35 +38,17 @@
     </operation>
 </template>
 
-<script>
+<script setup>
+import { inject } from 'vue';
 import { FontAwesomeIcon as Fa } from '@fortawesome/vue-fontawesome';
 import { faCheck, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { enums } from '@enso-ui/enums/src/pinia/enums';
 import { shortNumber } from '@enso-ui/mixins';
 import Operation from './Operation.vue';
 
-export default {
+defineOptions({
     name: 'Import',
+});
 
-    components: { Fa, Operation },
-
-    inject: ['i18n'],
-
-    data: () => ({
-        faCheck,
-        faXmark,
-    }),
-
-    computed: {
-        enums() {
-            return enums().enums;
-        },
-    },
-
-    methods: {
-        shortNumber(value) {
-            return shortNumber(value);
-        },
-    },
-};
+const i18n = inject('i18n');
 </script>

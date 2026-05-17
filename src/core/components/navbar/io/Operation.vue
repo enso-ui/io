@@ -2,6 +2,9 @@
 import { enums } from '@enso-ui/enums/src/pinia/enums';
 import formatDistance from '@enso-ui/ui/src/modules/plugins/date-fns/formatDistance';
 import { isAfter } from 'date-fns';
+import {
+    onBeforeMount, onBeforeUnmount, ref,
+} from 'vue';
 
 export default {
     name: 'Operation',
@@ -19,57 +22,41 @@ export default {
 
     emits: ['cancel'],
 
-    data: () => ({
-        end: true,
-        elapsed: null,
-        remaining: null,
-        updater: null,
-    }),
+    setup(props, { emit, slots }) {
+        const end = ref(true);
+        const elapsed = ref(null);
+        const remaining = ref(null);
+        const updater = ref(null);
 
-    computed: {
-        enums() {
-            return enums().enums;
-        },
-    },
+        const update = () => {
+            elapsed.value = formatDistance(props.operation.createdAt);
 
-    beforeMount() {
-        this.update();
-        this.autoUpdate();
-    },
-
-    beforeUnmount() {
-        clearInterval(this.updater);
-    },
-
-    methods: {
-        autoUpdate() {
-            this.updater = setInterval(() => this.update(), 1000);
-        },
-        toggle() {
-            this.end = !this.end;
-        },
-        update() {
-            this.elapsed = formatDistance(this.operation.createdAt);
-
-            this.remaining = this.operation.estimatedEnd
-                && isAfter(new Date(this.operation.estimatedEnd), new Date())
-                ? formatDistance(this.operation.estimatedEnd)
+            remaining.value = props.operation.estimatedEnd
+                && isAfter(new Date(props.operation.estimatedEnd), new Date())
+                ? formatDistance(props.operation.estimatedEnd)
                 : null;
-        },
-    },
+        };
+        const toggle = () => {
+            end.value = !end.value;
+        };
 
-    render() {
-        return this.$slots.default({
-            cancellable: this.cancellable,
-            elapsed: this.elapsed,
-            end: this.end,
+        onBeforeMount(() => {
+            update();
+            updater.value = setInterval(update, 1000);
+        });
+        onBeforeUnmount(() => clearInterval(updater.value));
+
+        return () => slots.default({
+            cancellable: props.cancellable,
+            elapsed: elapsed.value,
+            end: end.value,
             events: {
-                click: () => this.$emit('cancel', this.operation),
+                click: () => emit('cancel', props.operation),
             },
-            ioTypes: this.enums.ioTypes,
-            operation: this.operation,
-            remaining: this.remaining,
-            toggle: this.toggle,
+            ioTypes: enums().enums.ioTypes,
+            operation: props.operation,
+            remaining: remaining.value,
+            toggle,
         });
     },
 };

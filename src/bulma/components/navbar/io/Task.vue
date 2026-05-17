@@ -1,7 +1,7 @@
 <template>
     <operation>
         <template #status="{ operation }">
-            {{ enums.exportStatuses._get(operation.status) }}
+            {{ enums().enums.exportStatuses._get(operation.status) }}
         </template>
         <template #body="{ operation }">
             <p class="one-line">
@@ -29,34 +29,17 @@
     </operation>
 </template>
 
-<script>
+<script setup>
+import { inject } from 'vue';
 import { FontAwesomeIcon as Fa } from '@fortawesome/vue-fontawesome';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
 import { enums } from '@enso-ui/enums/src/pinia/enums';
 import { shortNumber } from '@enso-ui/mixins';
 import Operation from './Operation.vue';
 
-export default {
-    name: 'Export',
+defineOptions({
+    name: 'Task',
+});
 
-    components: { Fa, Operation },
-
-    inject: ['i18n'],
-
-    data: () => ({
-        faCheck,
-    }),
-
-    computed: {
-        enums() {
-            return enums().enums;
-        },
-    },
-
-    methods: {
-        shortNumber(value) {
-            return shortNumber(value);
-        },
-    },
-};
+const i18n = inject('i18n');
 </script>
